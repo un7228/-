@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RPG 角色狀態</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      position: relative;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    table td {
+      padding: 6px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    #charImage {
+      width: 200px;
+      transition: opacity 0.2s;
+    }
+
+    #attackImage {
+      width: 200px;
+      position: absolute;
+      left: 50%;
+      top: 120px;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+
+    .show {
+      opacity: 1 !important;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    select {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>角色狀態</h1>
+    <select id="characterSelect">
+      <option value="hero">勇者艾爾</option>
+      <option value="mage">法師莉娜</option>
+    </select>
+    <table>
+      <tr><td>名稱</td><td id="charName"></td></tr>
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          <img id="charImage" src="hero.png" alt="角色圖" class="char-img">
+          <img id="attackImage" src="attack.png" alt="攻擊動畫">
+        </td>
+      </tr>
+      <tr><td>技能</td><td id="skills"></td></tr>
+      <tr><td>背包</td><td id="inventory"></td></tr>
+      <tr><td>攻擊招式</td><td id="attacks"></td></tr>
+      <tr><td>防禦力</td><td id="defense"></td></tr>
+      <tr><td>生命值</td><td id="health"></td></tr>
+    </table>
+    <button onclick="attack()">攻擊</button>
+    <p id="battleLog"></p>
+  </div>
+
+  <script>
+    const characters = {
+      hero: {
+        name: "勇者艾爾",
+        image: "hero.png",
+        skills: ["火焰術", "冰霜護盾"],
+        inventory: ["治癒藥水", "鋼劍"],
+        attacks: ["斬擊", "火焰彈"],
+        defense: 12,
+        health: 100
+      },
+      mage: {
+        name: "法師莉娜",
+        image: "mage.png",
+        skills: ["閃電鏈", "魔力屏障"],
+        inventory: ["魔法書", "法杖"],
+        attacks: ["雷擊", "寒冰箭"],
+        defense: 8,
+        health: 80
+      }
+    };
+
+    function loadCharacter(id) {
+      const c = characters[id];
+      document.getElementById("charName").textContent = c.name;
+      document.getElementById("charImage").src = c.image;
+      document.getElementById("skills").textContent = c.skills.join(", ");
+      document.getElementById("inventory").textContent = c.inventory.join(", ");
+      document.getElementById("attacks").textContent = c.attacks.join(", ");
+      document.getElementById("defense").textContent = c.defense;
+      document.getElementById("health").textContent = c.health;
+      document.getElementById("battleLog").textContent = "";
+    }
+
+    function attack() {
+      const dmg = Math.floor(Math.random() * 20) + 5;
+      document.getElementById("battleLog").textContent = "你對敵人造成了 " + dmg + " 點傷害！";
+
+      const img = document.getElementById("attackImage");
+      img.classList.add("show");
+      setTimeout(() => img.classList.remove("show"), 300);
+    }
+
+    document.getElementById("characterSelect").addEventListener("change", function() {
+      loadCharacter(this.value);
+    });
+
+    loadCharacter("hero");
+  </script>
+</body>
+</html>
